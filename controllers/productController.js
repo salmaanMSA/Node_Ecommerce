@@ -3,6 +3,7 @@ const Product = require('../models/productModel');
 // Logic for creating new product
 module.exports.createProduct = async function(req, res){
     try{
+        console.log(req.body)
         let product = await Product.findOne({name: req.body.name});
         // check if the product already exists in db
         if (product){
@@ -40,7 +41,7 @@ module.exports.viewProducts = async function(req, res){
     try{
         let products = await Product.find({}); // fetch all products
         return res.json(200, {
-            message: "List of Product",
+            message: "List of Products",
             data: {
                 products: products
             }
@@ -60,7 +61,7 @@ module.exports.deleteProduct = async function(req, res){
         let product = await Product.deleteOne({_id: req.params.id}); // delete product with id
         if (product){
             return res.json(200, {
-                message: "Selected Product deleted"
+                message: "Selected Product deleted successfully"
             });
         }
         else{
@@ -77,11 +78,30 @@ module.exports.deleteProduct = async function(req, res){
 }
 
 // Logic for updating product quantity
-module.exports.updateProduct = function(req, res){
+module.exports.updateProduct = async function(req, res){
     try{
         let product = await Product.findById(req.params.id);
         if (product){
-            product.quantity += req.query.
+            product.quantity = Number(product.quantity) + Number(req.query.number)
+            product.save();
+            return res.json(200, {
+                message: "Product details Updated Successfully",
+                data: {
+                    id: product._id,
+                    name: product.name,
+                    quantity: product.quantity
+                }
+            });
         }
+        else{
+            return res.json(404, {
+                message: "Product doesn't exists"
+            });
+        }
+    }
+    catch(err){
+        return res.json(500, {
+            message: `Internal Server Error \n Error: ${err}`
+        });
     }
 }
