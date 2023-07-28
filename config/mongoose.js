@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 
 // connect to database
 
-mongoose.connect("mongodb+srv://salmaanMsa:4115@cecom.7rz0okz.mongodb.net/?retryWrites=true&w=majority")
+// mongoose.connect("mongodb+srv://salmaanMsa:4115@cecom.7rz0okz.mongodb.net/?retryWrites=true&w=majority")
 
+mongoose.connect("mongodb://localhost/CEcomm");
 
 // acquire the connection (to check connection is successfull)
 const db = mongoose.connection;
